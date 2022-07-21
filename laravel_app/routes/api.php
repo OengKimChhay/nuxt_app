@@ -14,14 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return 'hello';
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return 'hello';
+// });
 
-Route::post('register', 'AuthController@register');
-Route::post('login', 'AuthController@login');
+Route::post('register'  , 'AuthController@register');
+Route::post('login'     , 'AuthController@login');
 
 Route::group(['middleware' => 'jwt.verify','prefix' => 'auth'], function ($router) {
-    Route::post('logout', 'AuthController@logout');
-
+    Route::post('logout'            , 'AuthController@logout');
+    Route::get('get-users'          , 'AuthController@getAllUser');
+    Route::get('get-user-logged-in' , 'AuthController@getUser');
 });
