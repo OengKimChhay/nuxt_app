@@ -1,7 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
-  // Global page headers: https://go.nuxtjs.dev/config-head
+  // ============================Global page headers: https://go.nuxtjs.dev/config-head==========================
   head: {
     titleTemplate: '%s - nuxt_app',
     title: 'nuxt_app',
@@ -14,15 +14,22 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
+
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [],
 
-  // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
 
-  // Auto import components: https://go.nuxtjs.dev/config-components
+  // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
+  plugins: [
+    '~/plugins/mixin'
+  ],
+
+
+  // =======================Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
-  // Auto import components with nested directory
+
+
+  // =======================Auto import components with nested directory========
   // components: {
   //   dirs: [
   //     '~/components',
@@ -30,39 +37,89 @@ export default {
   //   ]
   // },
 
-  // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
+
+  // ===============================Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
-    // https://go.nuxtjs.dev/typescript
-    '@nuxt/typescript-build',
-    // https://go.nuxtjs.dev/vuetify
-    '@nuxtjs/vuetify',
+    '@nuxt/typescript-build', // https://go.nuxtjs.dev/typescript
+    '@nuxtjs/vuetify',        // https://go.nuxtjs.dev/vuetify
   ],
 
-  // Modules: https://go.nuxtjs.dev/config-modules
+
+  // ================================Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios',
+    '@nuxtjs/axios',      // https://go.nuxtjs.dev/axios
     '@nuxtjs/auth-next',
-    '@nuxtjs/dotenv',
-    // https://go.nuxtjs.dev/pwa
-    '@nuxtjs/pwa'
+    '@nuxtjs/dotenv',     // in order to use .env file
+    '@nuxtjs/proxy',      // in order to advoid CORS in nuxt.js
+    '@nuxtjs/pwa',        // https://go.nuxtjs.dev/pwa
+    '@nuxtjs/toast',      // in order to use toast module
+    '@nuxtjs/date-fns',   // to use date format $dateFns.format(new Date())
   ],
 
-  // Axios module configuration: https://go.nuxtjs.dev/config-axios
+
+  // ============================Axios module configuration: https://go.nuxtjs.dev/config-axios=========================
   axios: {
-    // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: '/',
-    credentials: true,
+    baseURL: process.env.BASE_URL,
+    credentials: true, // true means needs to pass authentication headers to the backend.
+    proxy: true,
   },
 
-  // PWA module configuration: https://go.nuxtjs.dev/pwa
+
+  // ============================configeration for laravel jwt auth provideing below===============================
+  auth: {
+    strategies: {
+      'laravelJWT': {
+        provider: 'laravel/jwt',
+        url: process.env.BASE_URL,
+        endpoints: {
+          login:{
+            url:'/api/login'
+          },
+          logout:{
+            url: '/api/auth/logout',
+            method: 'post'
+          },
+          user: {
+            url: '/api/auth/get-user-logged-in',
+            method: 'get',
+            property: false,
+          }
+        },
+        token: {
+          property: 'access_token',
+          maxAge: 60 * 60
+        },
+        refreshToken: {
+          maxAge: 20160 * 60
+        },
+      },
+    }
+  },
+
+
+  // ================================auth is guard route to project if not authenticated redirect to login page===================
+  // ================================we can add middleware to project the component we prefer by add middleware : ['auth'] to export default
+  // router:{
+  // middleware : ['auth']
+  // },
+
+
+  // ================================ in order to advoid CORS in nuxt.js ================================
+  proxy: {
+    // '/api/': { target: process.env.BASE_URL, pathRewrite: {'^/api/': ''}, changeOrigin: true },
+    '/weather/': { target: 'https://api.openweathermap.org', pathRewrite: {'^/weather/': ''}, changeOrigin: true }
+  },
+
+
+  // ================================PWA module configuration: https://go.nuxtjs.dev/pwa ==============
   pwa: {
     manifest: {
       lang: 'en',
     },
   },
 
-  // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
+
+  // =================================Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify==============
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
@@ -81,6 +138,36 @@ export default {
     },
   },
 
-  // Build Configuration: https://go.nuxtjs.dev/config-build
+
+  // ==================================Build Configuration: https://go.nuxtjs.dev/config-build=======================
   build: {},
+
+
+  // ==================================customize progress bar color==================================================
+  loading: {
+    color :'#39b982',
+    height: '5px'
+  },
+
+
+  // ==================================customize default port when running app========================================
+  server: {
+    port: 5555,
+  },
+
+  // ================================== customize for the use of toast =============================================
+  toast: {
+    position: 'top-center',
+    duration: 4000,
+    keepOnHover: false,
+    theme:'toasted-primary',  // ['toasted-primary', 'outline', 'bubble']
+    // className: 'test-toast',
+    // containerClass: 'test-taost-c'
+  },
+
+
+  // to customize date fn
+  dateFns: {
+    format: 'dd, MM, yyyy hh:mm a'
+  }
 }

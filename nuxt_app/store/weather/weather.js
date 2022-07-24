@@ -16,11 +16,12 @@ export const mutations = {
 export const actions = {
   async getWeather({commit},contry){
     commit("LOADING",true);
-    await this.$axios.$get(`https://api.openweathermap.org/data/2.5/weather?q=${contry}&appid=${process.env.WEATHER_APP_ID}`)
-    .then((res)=>{
+    // /weather/ is an proxy:{} name in nuxt.config.js file
+    const res = await this.$axios.$get(`/weather/data/2.5/weather?q=${contry}&appid=${process.env.WEATHER_APP_ID}`);
+    if(res){
       setTimeout(function(){ commit("LOADING",false); }, 2000);
       commit("WEATHER",res);
-    });
+    }
   }
 }
 

@@ -1,7 +1,19 @@
 <template>
   <div class="mt-5" style="max-width:500px; margin:auto;">
     <h2 class="text-center">Weather App</h2>
-    <v-autocomplete v-model="country" :items="countryList"  auto-select-first clearable deletable-chips dense solo @change="changeCountry()" placeholder="Please select a country"></v-autocomplete>
+    <v-autocomplete
+        v-model="country"
+        :items="countryList"
+        label="Search your country"
+        prepend-icon="mdi-database-search"
+        auto-select-first
+        clearable
+        deletable-chips
+        dense
+        solo
+        placeholder="Search your country"
+        @change="changeCountry()" >
+    </v-autocomplete>
       <v-card :loading="getLoading" class="mx-auto" max-width="400" >
       <v-list-item two-line>
         <v-list-item-content>
@@ -54,7 +66,7 @@
 import {mapActions,mapGetters} from 'vuex';
 export default {
   name: 'WeatherApp',
-  layout: 'BaseLayout',
+  layout: 'customLayout',
   data(){
     return{
       country:'cambodia',
@@ -306,8 +318,10 @@ export default {
       ]
     }
   },
-  head: {
-    titleTemplate: 'weather'
+  head() {
+    return{
+      title: 'weather'
+    }
   },
   computed:{
     ...mapGetters('weather/weather',['weather','getLoading']),

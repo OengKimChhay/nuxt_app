@@ -11,7 +11,7 @@ class ResponseController extends Controller
     public static function client($data){
         return response()->json([
             'success'   => false,
-            'status'    => Response::HTTP_BAD_REQUEST,
+            'status'    => Response::HTTP_BAD_REQUEST, // 400
             'result'      => $data
         ], Response::HTTP_BAD_REQUEST);
     }
@@ -20,7 +20,7 @@ class ResponseController extends Controller
     public static function serverError($data){
         return response()->json([
             'success'   => false,
-            'status'    => Response::HTTP_INTERNAL_SERVER_ERROR,
+            'status'    => Response::HTTP_INTERNAL_SERVER_ERROR, // 500
             'result'      => $data
         ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
@@ -40,7 +40,7 @@ class ResponseController extends Controller
     public static function notFound($data){
         return response()->json([
             'success'   => false,
-            'status'    => Response::HTTP_NOT_FOUND,
+            'status'    => Response::HTTP_NOT_FOUND, // 404
             'result'      => $data
         ], Response::HTTP_NOT_FOUND);
     }
@@ -50,7 +50,7 @@ class ResponseController extends Controller
     public static function success($data){
         return response()->json([
             'success'   => true,
-            'status'    => Response::HTTP_OK,
+            'status'    => Response::HTTP_OK, // 200
             'result'      => $data
         ], Response::HTTP_OK);
     }

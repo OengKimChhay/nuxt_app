@@ -1,13 +1,9 @@
 <template>
   <v-row justify="center" align="center">
     <v-col cols="12" sm="8" md="6">
-      <v-card class="logo py-4 d-flex justify-center">
-        <NuxtLogo />
-        <VuetifyLogo />
-      </v-card>
       <v-card>
         <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
+          Welcome to home page
         </v-card-title>
         <v-card-text>
           <p>
@@ -55,25 +51,25 @@
             <em><small>&mdash; John Leider</small></em>
           </div>
           <hr class="my-3" />
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt Documentation
-          </a>
-          <br />
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn color="primary" nuxt to="/inspire"> Continue </v-btn>
+          <v-btn
+            color="primary"
+            :to="{ name:'login'}"
+            rel="noopener noreferrer"
+          >
+            Login
+          </v-btn>
+          <br />
+          <v-btn
+            class="mx-3"
+            color="primary"
+            :to="{name:'register'}"
+            rel="noopener noreferrer"
+          >
+            Register
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -83,6 +79,11 @@
 <script>
 export default {
   name: 'IndexPage',
-  layout: 'BaseLayout'
+  layout: 'customLayout',
+  head() {
+    return{
+      title: 'Home'
+    }
+  }
 }
 </script>

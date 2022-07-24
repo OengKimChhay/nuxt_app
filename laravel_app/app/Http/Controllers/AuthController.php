@@ -26,7 +26,6 @@ class AuthController extends Controller
             'password'  => 'required|string|min:6|max:50'
         ]);
 
-
         if ($validator->fails()) {
             $data = [
                 'error' => $validator->messages()
@@ -73,8 +72,9 @@ class AuthController extends Controller
                 return ResponseController::unAuthorized($data);
             }else{
                 $data = [
-                    'message' => 'Login Success.',
+                    'message'   => 'Login Success.',
                     'token'     => $token,
+                    'user'      => JWTAuth::user()
                 ];
                 return ResponseController::success($data);
             }
@@ -132,7 +132,7 @@ class AuthController extends Controller
 
     public function getAllUser(){
         try {
-            $users = User::all();
+            $users = User::select('id', 'name', 'email', 'created_at')->get();
             $data = [
                 'message' => 'All users',
                 'users'   => $users
