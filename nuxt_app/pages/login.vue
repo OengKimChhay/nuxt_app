@@ -10,22 +10,8 @@
                 </v-toolbar>
                 <v-alert v-if="error" dense outlined type="error" style="margin:20px;">{{ error ?? '' }}</v-alert>
                 <v-card-text>
-                      <v-text-field
-                          v-model="user.email"
-                          :error-messages="errors.email ? errors.email[0] : ''"
-                          prepend-icon="mdi-email"
-                          label="Email"
-                          type="email"
-                          autocomplete
-                      ></v-text-field>
-                      <v-text-field
-                          v-model="user.password"
-                          :error-messages="errors.password ? errors.password[0] : ''"
-                          prepend-icon="mdi-lock"
-                          label="Password"
-                          type="password"
-                          autocomplete
-                      ></v-text-field>
+                  <!-- form input field is an component -->
+                      <form-component v-model=user />
                 </v-card-text>
                 <v-card-actions >
                     <v-spacer></v-spacer>
@@ -49,10 +35,7 @@ export default {
   middleware: ['loggedIn'],
   data(){
     return{
-      user:{
-        email:'',
-        password:''
-      }
+      user:{}
     }
   },
   head: {
@@ -64,10 +47,11 @@ export default {
   methods:{
     ...mapActions('authenthication/auth',['login']),
     userLogin(){
-      const formData = new FormData();
-      formData.append('email', this.user.email);
-      formData.append('password', this.user.password);
-      this.login(formData);
+      console.log(this.user)
+      // const formData = new FormData();
+      // formData.append('email', this.user.email);
+      // formData.append('password', this.user.password);
+      // this.login(formData);
     }
   }
 }

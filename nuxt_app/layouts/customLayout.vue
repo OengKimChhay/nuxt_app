@@ -2,6 +2,10 @@
 <v-app>
 
     <v-bottom-navigation>
+        <v-btn :to="{ name:'googleMap' }" >
+            <span>Google Map</span>
+            <v-icon>mdi-home-variant</v-icon>
+        </v-btn>
         <v-btn :to="{ name:'index' }" >
             <span>Home</span>
             <v-icon>mdi-home-variant</v-icon>
