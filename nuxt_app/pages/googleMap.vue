@@ -55,14 +55,13 @@
         />
 
       <!-- show marker when search only -->
-      <Gmap-Marker
-        v-if="this.place"
-        label="sdfsd"
+      <gmap-marker
+        v-if="place"
         :position="{
-          lat: this.place.geometry.location.lat(),
-          lng: this.place.geometry.location.lng(),
+          lat: place.geometry.location.lat(),
+          lng: place.geometry.location.lng(),
         }"
-      ></Gmap-Marker>
+      ></gmap-marker>
 
       <!-- show pop up -->
       <gmap-info-window
