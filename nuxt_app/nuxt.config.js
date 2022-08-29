@@ -43,6 +43,7 @@ export default {
   buildModules: [
     '@nuxt/typescript-build', // https://go.nuxtjs.dev/typescript
     '@nuxtjs/vuetify',        // https://go.nuxtjs.dev/vuetify
+    '@nuxtjs/composition-api/module'
   ],
 
 

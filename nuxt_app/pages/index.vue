@@ -1,89 +1,187 @@
 <template>
   <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to home page
-        </v-card-title>
-        <v-card-text>
-          <p>
-            Vuetify is a progressive Material Design component framework for
-            Vue.js. It was designed to empower developers to create amazing
-            applications.
-          </p>
-          <p>
-            For more information on Vuetify, check out the
-            <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation </a
-            >.
-          </p>
-          <p>
-            If you have questions, please join the official
-            <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord </a
-            >.
-          </p>
-          <p>
-            Find a bug? Report it on the github
-            <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board </a
-            >.
-          </p>
-          <p>
-            Thank you for developing with Vuetify and I look forward to bringing
-            more exciting features in the future.
-          </p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3" />
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            :to="{ name:'login'}"
-            rel="noopener noreferrer"
-          >
-            Login
-          </v-btn>
-          <br />
-          <v-btn
-            class="mx-3"
-            color="primary"
-            :to="{name:'register'}"
-            rel="noopener noreferrer"
-          >
-            Register
-          </v-btn>
-        </v-card-actions>
-      </v-card>
+    <v-col cols="12" sm="12" md="12">
+      <emit-event @add="EmitEvent" />
+
+      <br />
+      <hr />
+      <test-provide-and-inject />
+
+      <hr />
+      <p>how to use computed {{ filmNameComputed }}</p>
+
+      <p>how to use function{{ fun('test') }}</p>
+
+      <p>
+        use watcher in setup let see dev tool:
+        <input v-model="filmName" type="text" style="border: 1px solid grey" />
+      </p>
+
+      
+      <p>Call composable fun Mouse position is at: {{ x }}, {{ y }}</p>
+      <br />
+
+
+      <p>this is how to use transition</p>
+      <button @click="showP = !showP" style="border: 1px solid grey">
+        Toggle
+      </button>
+      <!-- we use show of name attr to style the class in style tag at the bottom ex .show-enter-active
+      but if we remove name attr we use .v-enter-active instead
+      -->
+      <transition name="show">
+        <p v-if="showP">Hello there</p>
+      </transition>
     </v-col>
   </v-row>
 </template>
 
 <script>
+import {
+  ref,
+  watch,
+  watchEffect,
+  computed,
+  onMounted,
+} from '@nuxtjs/composition-api'
+import useMouse from '@/composable/useMouse'
 export default {
   name: 'IndexPage',
+  // we can pass data through multi child component without using prop let see in <test-provide-and-inject> component
+  provide() {
+    return {
+      username: 'this a provide',
+    }
+  },
   layout: 'customLayout',
+  setup() {
+    const filmName = ref('')
+
+    // how to call composable function
+    const { x, y } = useMouse()
+
+    // ------ watcher -----
+    // to watch multi param
+    // watch([count, count2], ([newCount, newCount2], [oldCount, oldCount2]) => {
+    watch(filmName, (newVal, oldVal) => {
+      console.log(`new val: ${newVal} and old val: ${oldVal}`)
+    })
+
+    // watchEffect only get new value
+    watchEffect(() => {
+      console.log(`watchEffect - ${filmName.value}`)
+    })
+
+    // ----- computed -----
+    const filmNameComputed = computed(() => {
+      const num1 = 4
+      const num2 = 3
+      return num1 + num2
+    })
+
+    // ----- function -----
+    const fun = (param) => {
+      return 'Hello function ' + param
+    }
+
+    const EmitEvent = (param) => {
+      console.log(param)
+    }
+
+    // ----- life Cycle hook -----
+    onMounted(() => {
+      alert('on mounted hook render')
+    })
+
+    return {
+      fun,
+      EmitEvent,
+      x,
+      y,
+      filmName,
+      filmNameComputed,
+    }
+  },
+  data() {
+    return { showP: false }
+  },
   head() {
-    return{
-      title: 'Home'
+    return {
+      title: 'Home',
     }
   }
+  // watch: {
+  //   filmName(newValue) {
+  //     console.log('Calling API for ' + newValue)
+  //   }
+  // }
+  // use this if we want to run watch when page loads
+  // watch: {
+  //   dataPropertyToWatch: {
+  //     handler(newValue) {
+  //       // watcher method logic
+  //     },
+  //     immediate: true,
+  //   },
+  // },
+  // use this if we want to watch nested object
+  // watch: {
+  //   film: {
+  //     handler(newValue) {
+  //       console.log('Film: ' + newValue.title + ', directed by ' + newValue.director)
+  //     },
+  //     deep: true
+  //   }
+  // }
 }
 </script>
+<style>
+.show-enter-active {
+  animation: shake 1s ease;
+}
+
+@keyframes shake {
+  /* fade in and slide down */
+  0% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+  /* shake from right to left */
+  60% {
+    transform: translateX(5px);
+  }
+  65% {
+    transform: translateX(-5px);
+  }
+  70% {
+    transform: translateX(4px);
+  }
+  75% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(3px);
+  }
+  85% {
+    transform: translateX(-3px);
+  }
+  90% {
+    transform: translateX(2px);
+  }
+  95% {
+    transform: translateX(-2px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+</style>
+<!-- 
+v-enter-from is applied before the element enters the browser window. This is where we set the element’s starting CSS state.
+v-enter-to is applied when the element enters the browser window. This is where we set the element’s ending CSS state.
+v-enter-active is applied when the element is transitioning from one state to another. This is where we set the duration and easing of the transition.
+ -->

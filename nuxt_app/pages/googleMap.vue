@@ -19,7 +19,12 @@
     <!-- --------------------------------------------------------------- -->
     <br />
     <h1>google map</h1>
-    <button style="border:1px solid grey; width:fit-content" @click="isCluster = !isCluster" >toggle cluster</button>
+    <button
+      style="border: 1px solid grey; width: fit-content"
+      @click="isCluster = !isCluster"
+    >
+      toggle cluster
+    </button>
     <gmap-map
       ref="propertyMap"
       :center="center"
@@ -38,21 +43,29 @@
           :icon="marker.icon"
           :clickable="true"
           :draggable="false"
+          :label="{
+            text:marker.price,
+            className: 'map-marker-label',
+          }"
           @click="toggleInfoWindow(marker)"
         />
       </gmap-cluster>
 
       <!-- show marker -->
-        <gmap-marker
-          v-for="marker in markers"
-          v-else
-          :key="marker.id"
-          :position="marker.position"
-          :icon="marker.icon"
-          :clickable="true"
-          :draggable="false"
-          @click="toggleInfoWindow(marker)"
-        />
+      <gmap-marker
+        v-for="marker in markers"
+        v-else
+        :key="marker.id"
+        :label="{
+          text: marker.price,
+          className: 'map-marker-label',
+        }"
+        :position="marker.position"
+        :icon="marker.icon"
+        :clickable="true"
+        :draggable="false"
+        @click="toggleInfoWindow(marker)"
+      />
 
       <!-- show marker when search only -->
       <gmap-marker
@@ -122,6 +135,7 @@ export default {
           image:
             'https://static9.depositphotos.com/1719616/1205/i/600/depositphotos_12057489-stock-photo-sunflower-field.jpg',
           text: 'The section below lists all of the code',
+          price: '200899$',
         },
         {
           position: { lat: 11.549230440183884, lng: 104.84432745185725 },
@@ -129,6 +143,7 @@ export default {
           image:
             'https://static9.depositphotos.com/1719616/1205/i/600/depositphotos_12057489-stock-photo-sunflower-field.jpg',
           text: 'The section below lists all of the code',
+          price: '32442$',
         },
         {
           position: { lat: 11.549905724308342, lng: 104.89206129850976 },
@@ -136,6 +151,7 @@ export default {
           image:
             'https://static9.depositphotos.com/1719616/1205/i/600/depositphotos_12057489-stock-photo-sunflower-field.jpg',
           text: 'The section below lists all of the code',
+          price: '67832$',
         },
       ],
 
@@ -147,6 +163,10 @@ export default {
           width: 1,
           height: -40,
         },
+      },
+      label: {
+        text: '2000$',
+        className: 'map-marker-label',
       },
 
       place: null,
@@ -207,3 +227,14 @@ export default {
   },
 }
 </script>
+<style>
+.map-marker-label {
+  color: rgb(0 0 0);
+  font-size: 11px;
+  background: #868686;
+  padding: 4px;
+  margin-top: -45px;
+  box-shadow: 0px 1px 2px 0px black;
+  border-radius: 3px;
+}
+</style>
